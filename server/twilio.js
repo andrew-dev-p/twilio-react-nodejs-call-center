@@ -1,0 +1,43 @@
+import dotenv from "dotenv";
+dotenv.config();
+
+import twilio from "twilio";
+
+class Twilio {
+  constructor() {
+    this.client = new twilio(
+      process.env.TWILIO_TOKEN_SID,
+      process.env.TWILIO_TOKEN_SECRET,
+      { accountSid: process.env.TWILIO_ACCOUNT_SID }
+    );
+  }
+
+  getTwilioClient() {
+    return this.client;
+  }
+
+  async sendVerify(to, channel) {
+    const data = await this.client.verify.v2
+      .services(process.env.TWILIO_VERIFY_SERVICE_SID)
+      .verifications.create({
+        to,
+        channel,
+      });
+
+    return data;
+  }
+
+  async verifyCode(to, code) {
+    const data = await this.client.verify.v2
+      .services(process.env.TWILIO_VERIFY_SERVICE_SID)
+      .verificationChecks.create({
+        to,
+        code,
+      });
+  }
+}
+
+const twilioInstance = new Twilio();
+Object.freeze(twilioInstance);
+
+export default twilioInstance;

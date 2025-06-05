@@ -11,6 +11,7 @@ dotenv.config();
 
 const app = express();
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(
   cors({
     origin: "http://localhost:5173",
@@ -77,6 +78,9 @@ app.post("/verify", async (req, res) => {
 
 app.post("/call-new", async (req, res) => {
   const response = twilio.voiceResponse("Thank you for calling!");
+
+  io.emit("call-new", { data: req.body });
+
   res.type("text/xml");
   res.send(response.toString());
 });

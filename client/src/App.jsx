@@ -7,11 +7,20 @@ import useLocalStorage from "./hooks/useLocalStorage";
 import CallCenter from "./components/CallCenter";
 
 const App = () => {
+  const [calls, setCalls] = useImmer({
+    calls: []
+  });
   const [storedToken, setStoredToken] = useLocalStorage("token", null);
 
   useEffect(() => {
     socket.on("connect", () => {
       console.log("Connected to server");
+    });
+
+    socket.on("call-new", (data) => {
+      setCalls((draft) => {
+        draft.calls.push(data);
+      });
     });
 
     socket.on("disconnect", () => {

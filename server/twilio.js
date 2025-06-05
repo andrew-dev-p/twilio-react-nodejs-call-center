@@ -2,6 +2,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import twilio from "twilio";
+import VoiceResponse from "twilio/lib/twiml/VoiceResponse.js";
 
 class Twilio {
   constructor() {
@@ -36,6 +37,19 @@ class Twilio {
       });
 
     return data;
+  }
+
+  voiceResponse(message) {
+    const twiml = new VoiceResponse();
+    twiml.say(
+      {
+        voice: "Polly.Bianca",
+        loop: 2,
+      },
+      message
+    );
+
+    return twiml;
   }
 }
 

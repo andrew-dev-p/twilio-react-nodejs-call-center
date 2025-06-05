@@ -2,7 +2,6 @@ import NavBar from "./NavBar";
 import CallProgress from "./CallProgress";
 
 function CallCenter({ calls }) {
-  console.log("calls: ", calls);
   return (
     <div>
       <NavBar />

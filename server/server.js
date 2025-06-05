@@ -4,11 +4,15 @@ dotenv.config();
 import express from "express";
 const app = express();
 
+import bodyParser from "body-parser";
+app.use(bodyParser.json());
+
 import twilio from "./twilio.js";
 const twilioClient = twilio.getTwilioClient();
 
-app.get("/login", async (req, res) => {
-  const data = await twilio.sendVerify(process.env.MY_NUMBER, "sms");
+app.post("/login", async (req, res) => {
+  const { to, username, channel } = req.body;
+  const data = await twilio.sendVerify(to, channel);
   res.send(data);
 });
 

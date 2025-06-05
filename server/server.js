@@ -50,7 +50,18 @@ app.post("/login", async (req, res) => {
 
 app.post("/verify", async (req, res) => {
   const { to, code, username } = req.body;
-  const data = await twilio.verifyCode(to, code);
+
+  let data;
+  try {
+    data = await twilio.verifyCode(to, code);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).send({ error: "Twilio verification failed" });
+  }
+
+  if (!data) {
+    return res.status(500).send({ error: "No response from Twilio" });
+  }
 
   if (data.status === "approved") {
     const token = createJwt(username);

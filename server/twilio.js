@@ -34,6 +34,8 @@ class Twilio {
         to,
         code,
       });
+
+    return data;
   }
 }
 

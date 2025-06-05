@@ -2,9 +2,11 @@ import Login from "./components/Login";
 import { useImmer } from "use-immer";
 import client from "./lib/axios";
 import socket from "./lib/socketio";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const App = () => {
+  const [token, setToken] = useState(null);
+
   useEffect(() => {
     socket.on("connect", () => {
       console.log("Connected to server");
@@ -43,9 +45,10 @@ const App = () => {
     const response = await client.post("/verify", {
       to: user.mobileNumber,
       code: user.verificationCode,
+      username: user.username,
     });
 
-    console.log(response);
+    setToken(response.data.token);
   };
 
   return (

@@ -5,6 +5,7 @@ import express from "express";
 import http from "http";
 import { Server } from "socket.io";
 import twilio from "./twilio.js";
+import { createJwt } from "./lib/jwt.js";
 
 dotenv.config();
 
@@ -48,8 +49,13 @@ app.post("/login", async (req, res) => {
 });
 
 app.post("/verify", async (req, res) => {
-  const { to, code } = req.body;
+  const { to, code, username } = req.body;
   const data = await twilio.verifyCode(to, code);
-  console.log(data);
-  res.send(data);
+
+  if (data.status === "approved") {
+    const token = createJwt(username);
+    res.send({ token });
+  } else {
+    res.status(401).send({ error: "Invalid code" });
+  }
 });

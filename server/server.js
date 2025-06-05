@@ -49,6 +49,9 @@ io.use((socket, next) => {
 });
 
 io.on("connection", (socket) => {
+  socket.emit("twilio-token", {
+    token: twilio.getAccessTokenForVoice(socket.id),
+  });
   console.log("New client connected");
 });
 

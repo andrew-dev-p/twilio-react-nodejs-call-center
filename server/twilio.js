@@ -71,9 +71,9 @@ class Twilio {
     });
 
     const token = new AccessToken(
-      this.accountSid,
-      this.tokenSid,
-      this.tokenSecret,
+      process.env.TWILIO_ACCOUNT_SID,
+      process.env.TWILIO_TOKEN_SID,
+      process.env.TWILIO_TOKEN_SECRET,
       { identity }
     );
 

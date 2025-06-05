@@ -23,6 +23,13 @@ const App = () => {
       });
     });
 
+    socket.on("enqueue", (data) => {
+      setCalls((draft) => {
+        const index = draft.calls.findIndex(({callSid}) => callSid === data.CallSid);
+        draft.calls[index] = data.CallStatus = "enqueue";
+      });
+    });
+
     socket.on("disconnect", () => {
       console.log("Disconnected from server");
     });

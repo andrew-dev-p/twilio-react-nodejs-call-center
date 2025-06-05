@@ -4,7 +4,7 @@ import App from "./App.jsx";
 import "semantic-ui-css/semantic.min.css";
 
 createRoot(document.getElementById("root")).render(
-  <StrictMode>
+  // <StrictMode>
     <App />
-  </StrictMode>
+  // </StrictMode>
 );

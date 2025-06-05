@@ -6,7 +6,7 @@ function CallCenter({ calls }) {
     <div>
       <NavBar />
       {calls.calls.map((call) => (
-        <CallProgress key={call.id} call={call} />
+        <CallProgress key={call.data.callSid} call={call.data} />
       ))}
     </div>
   );

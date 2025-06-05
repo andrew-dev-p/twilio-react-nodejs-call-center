@@ -43,7 +43,7 @@ class Twilio {
     const twiml = new VoiceResponse();
     twiml.say(
       {
-        voice: "Polly.Bianca",
+        voice: "female",
         loop: 2,
       },
       message

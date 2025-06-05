@@ -65,7 +65,7 @@ const App = () => {
   return (
     <div>
       {storedToken ? (
-        <CallCenter />
+        <CallCenter calls={calls} />
       ) : (
         <Login
           user={user}

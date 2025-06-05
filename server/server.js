@@ -19,8 +19,10 @@ app.post("/login", async (req, res) => {
   res.send(data);
 });
 
-app.get("/verify", async (req, res) => {
-  const data = await twilio.verifyCode(process.env.MY_NUMBER, req.query.code);
+app.post("/verify", async (req, res) => {
+  const { to, code } = req.body;
+  const data = await twilio.verifyCode(to, code);
+  console.log(data);
   res.send(data);
 });
 

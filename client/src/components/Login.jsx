@@ -21,18 +21,18 @@ function Login({
         <Form>
           <Segment stacked>
             <Form.Input
-              fluid
+              fluid="true"
               icon='user'
-              iconPosition='left'
+              iconposition='left'
               placeholder='UserName'
               value={username}
               onChange={(event, data) => populateFilds(event, data)}
               name='username'
             />
             <Form.Input
-              fluid
+              fluid="true"
               icon='mobile alternate'
-              iconPosition='left'
+              iconposition='left'
               placeholder='Mobile number'
               value={mobileNumber}
               onChange={(event, data) => populateFilds(event, data)}
@@ -40,9 +40,9 @@ function Login({
             />
             {verificationSent && (
               <Form.Input
-                fluid
+                fluid="true"
                 icon='key'
-                iconPosition='left'
+                iconposition='left'
                 placeholder='Enter your code'
                 value={verificationCode}
                 onChange={(event, data) => populateFilds(event, data)}

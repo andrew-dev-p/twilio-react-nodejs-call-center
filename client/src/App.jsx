@@ -5,6 +5,7 @@ import socket from "./lib/socketio";
 import { useState, useEffect } from "react";
 import useTokenFromLocalStorage from "./hooks/useTokenFromLocalStorage";
 import CallCenter from "./components/CallCenter";
+import { Device } from "twilio-client";
 
 const App = () => {
   const [calls, setCalls] = useImmer({
@@ -93,7 +94,7 @@ const App = () => {
   };
 
   function connectTwilioVoiceClient(twilioToken) {
-    const device = new Twilio.Device(twilioToken, { debug: true });
+    const device = new Device(twilioToken, { debug: true });
 
     device.on('error', (error) => {
       console.error(error);

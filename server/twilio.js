@@ -49,6 +49,16 @@ class Twilio {
       message
     );
 
+    twiml.redirect("https://fa4c-37-57-168-221.ngrok-free.app/enqueue");
+
+    return twiml;
+  }
+
+  enqueueCall(queueName) {
+    const twiml = new VoiceResponse();
+
+    twiml.enqueue(queueName);
+
     return twiml;
   }
 }

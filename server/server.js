@@ -89,3 +89,10 @@ app.post("/call-status-change", async (req, res) => {
   console.log("call-status-change");
   res.send("call-status-change");
 });
+
+app.post("/enqueue", async (req, res) => {
+  const response = twilio.enqueueCall("Customer Support");
+
+  res.type("text/xml");
+  res.send(response.toString());
+});

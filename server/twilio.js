@@ -60,6 +60,26 @@ class Twilio {
 
     return twiml;
   }
+
+  getAccessTokenForVoice = (identity) => {
+    const AccessToken = twilio.jwt.AccessToken;
+    const VoiceGrant = AccessToken.VoiceGrant;
+
+    const voiceGrant = new VoiceGrant({
+      outgoingApplicationSid: process.env.TWILIO_TWIML_APP_SID,
+      incomingAllow: true,
+    });
+
+    const token = new AccessToken(
+      this.accountSid,
+      this.tokenSid,
+      this.tokenSecret,
+      { identity }
+    );
+
+    token.addGrant(voiceGrant);
+    return token.toJwt();
+  };
 }
 
 const twilioInstance = new Twilio();

@@ -2,7 +2,7 @@ import Login from "./components/Login";
 import { useImmer } from "use-immer";
 import client from "./lib/axios";
 import socket from "./lib/socketio";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import useTokenFromLocalStorage from "./hooks/useTokenFromLocalStorage";
 import CallCenter from "./components/CallCenter";
 
@@ -10,14 +10,23 @@ const App = () => {
   const [calls, setCalls] = useImmer({
     calls: []
   });
+
   const [storedToken, setStoredToken, isValidToken] = useTokenFromLocalStorage(null);
 
-useEffect(() => {
-  if (isValidToken) {
-    socket.addToken(storedToken);
-  } else {
-    socket.removeToken();
-  }
+  const [twilioToken, setTwilioToken] = useState(null);
+
+  useEffect(() => {
+    if (twilioToken) {
+      connectTwilioVoiceClient(twilioToken);
+    }
+  }, [twilioToken]);
+
+  useEffect(() => {
+    if (isValidToken) {
+      socket.addToken(storedToken);
+    } else {
+      socket.removeToken();
+    }
   }, [isValidToken, storedToken]);
 
   useEffect(() => {
@@ -39,6 +48,10 @@ useEffect(() => {
         draft.calls[index] = callData;
       });
     });
+
+    socket.client.on("twilio-token", (data) => {
+      setTwilioToken(data.token);
+    })
 
     socket.client.on("disconnect", () => {
       console.log("Disconnected from server");
@@ -78,6 +91,18 @@ useEffect(() => {
 
     setStoredToken(response.data.token);
   };
+
+  function connectTwilioVoiceClient(twilioToken) {
+    const device = new Twilio.Device(twilioToken, { debug: true });
+
+    device.on('error', (error) => {
+      console.error(error);
+    });
+
+    device.on('incoming', (connection) => {
+      connection.accept();
+    });
+  }
 
   return (
     <div>

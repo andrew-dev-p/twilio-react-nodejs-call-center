@@ -5,15 +5,15 @@ class Socket {
   client = null;
 
   constructor() {
-    this.client = io.connect(this.url);
+    this.client = io(this.url);
   }
 
   addToken(token) {
-    this.client = io.connect(this.url, { query: { token } });
+    this.client = io(this.url, { query: { token } });
   }
 
   removeToken() {
-    this.client = io.connect(this.url);
+    this.client = io(this.url);
   }
 }
 

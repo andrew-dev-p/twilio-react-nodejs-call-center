@@ -5,7 +5,7 @@ import express from "express";
 import http from "http";
 import { Server } from "socket.io";
 import twilio from "./twilio.js";
-import { createJwt, verifyJwt } from "./lib/jwt.js";
+import { createJwt, verifyToken } from "./lib/jwt.js";
 
 dotenv.config();
 
@@ -39,7 +39,7 @@ io.use((socket, next) => {
   if (socket.handshake.query && socket.handshake.query.token) {
     const { token } = socket.handshake.query;
     try {
-      const result = verifyJwt(token);
+      const result = verifyToken(token);
 
       if (result.username) return next();
     } catch (error) {
@@ -93,7 +93,7 @@ app.post("/check-token", async (req, res) => {
   try {
     let isValid = false;
     const { token } = req.body;
-    const data = verifyJwt(token);
+    const data = verifyToken(token);
     if (data) {
       isValid = true;
     }

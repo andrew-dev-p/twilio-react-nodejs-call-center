@@ -1,36 +1,31 @@
 import { Container, Step } from "semantic-ui-react";
 
-function CallProgress() {
-  const placeholderCall = {
-    CallSid: "CA123456789",
-    CallStatus: "answered",
-  };
-
+function CallProgress({ call }) {
   return (
     <Container>
       <Step.Group fluid>
         <Step
           icon="phone"
           title="Ringing"
-          description={placeholderCall.CallSid}
-          active={placeholderCall.CallStatus === "ringing"}
-          completed={placeholderCall.CallStatus !== "ringing"}
+          description={call.CallSid}
+          active={call.CallStatus === "ringing"}
+          completed={call.CallStatus !== "ringing"}
         />
         <Step
           icon="cogs"
           title="In queue"
           description="User waiting in queue"
-          active={placeholderCall.CallStatus === "enqueue"}
-          disabled={placeholderCall.CallStatus === "ringing"}
-          onClick={() => console.log("Answer call:", placeholderCall.CallSid)}
+          active={call.CallStatus === "enqueue"}
+          disabled={call.CallStatus === "ringing"}
+          onClick={() => console.log("Answer call:", call.CallSid)}
         />
         <Step
           icon="headphones"
           title="Answered"
           description="Answer by John"
           disabled={
-            placeholderCall.CallStatus === "ringing" ||
-            placeholderCall.CallStatus === "enqueue"
+            call.CallStatus === "ringing" ||
+            call.CallStatus === "enqueue"
           }
         />
         <Step
@@ -38,9 +33,9 @@ function CallProgress() {
           title="Hang up"
           description="Missed call"
           disabled={
-            placeholderCall.CallStatus === "ringing" ||
-            placeholderCall.CallStatus === "enqueue" ||
-            placeholderCall.CallStatus === "answered"
+            call.CallStatus === "ringing" ||
+            call.CallStatus === "enqueue" ||
+            call.CallStatus === "answered"
           }
         />
       </Step.Group>

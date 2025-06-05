@@ -23,10 +23,12 @@ const App = () => {
       });
     });
 
-    socket.on("enqueue", (data) => {
+    socket.on("enqueue", (callData) => {
       setCalls((draft) => {
-        const index = draft.calls.findIndex(({callSid}) => callSid === data.CallSid);
-        draft.calls[index] = data.CallStatus = "enqueue";
+        const index = draft.calls.findIndex(({callSid}) => callSid === callData.CallSid);
+        
+        callData.data.CallStatus = "enqueue";
+        draft.calls[index] = callData;
       });
     });
 

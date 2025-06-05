@@ -91,7 +91,7 @@ app.post("/call-status-change", async (req, res) => {
 });
 
 app.post("/enqueue", async (req, res) => {
-  io.emit("call-status-change", { data: req.body });
+  io.emit("enqueue", { data: req.body });
 
   const response = twilio.enqueueCall("Customer Support");
 

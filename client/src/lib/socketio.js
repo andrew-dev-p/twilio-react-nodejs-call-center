@@ -1,5 +1,22 @@
-import { io } from "socket.io-client";
+import io from "socket.io-client";
 
-const socket = io("http://localhost:3000");
+class Socket {
+  url = "http://localhost:3000";
+  client = null;
 
-export default socket;
+  constructor() {
+    this.client = io.connect(this.url);
+  }
+
+  addToken(token) {
+    this.client = io.connect(this.url, { query: { token } });
+  }
+
+  removeToken() {
+    this.client = io.connect(this.url);
+  }
+}
+
+const instance = new Socket();
+
+export default instance;

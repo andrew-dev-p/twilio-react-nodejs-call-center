@@ -5,7 +5,7 @@ import express from "express";
 import http from "http";
 import { Server } from "socket.io";
 import twilio from "./twilio.js";
-import { createJwt } from "./lib/jwt.js";
+import { createJwt, verifyJwt } from "./lib/jwt.js";
 
 dotenv.config();
 
@@ -73,6 +73,20 @@ app.post("/verify", async (req, res) => {
     res.send({ token });
   } else {
     res.status(401).send({ error: "Invalid code" });
+  }
+});
+
+app.post("/check-token", async (req, res) => {
+  try {
+    let isValid = false;
+    const { token } = req.body;
+    const data = verifyJwt(token);
+    if (data) {
+      isValid = true;
+    }
+    res.send({ isValid });
+  } catch (error) {
+    res.status(401).send({ error: "Invalid token" });
   }
 });
 

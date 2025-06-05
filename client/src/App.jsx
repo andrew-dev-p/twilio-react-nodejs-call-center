@@ -3,27 +3,35 @@ import { useImmer } from "use-immer";
 import client from "./lib/axios";
 import socket from "./lib/socketio";
 import { useEffect } from "react";
-import useLocalStorage from "./hooks/useLocalStorage";
+import useTokenFromLocalStorage from "./hooks/useTokenFromLocalStorage";
 import CallCenter from "./components/CallCenter";
 
 const App = () => {
   const [calls, setCalls] = useImmer({
     calls: []
   });
-  const [storedToken, setStoredToken] = useLocalStorage("token", null);
+  const [storedToken, setStoredToken, isValidToken] = useTokenFromLocalStorage(null);
+
+useEffect(() => {
+  if (isValidToken) {
+    socket.addToken(storedToken);
+  } else {
+    socket.removeToken();
+  }
+  }, [isValidToken, storedToken]);
 
   useEffect(() => {
-    socket.on("connect", () => {
+    socket.client.on("connect", () => {
       console.log("Connected to server");
     });
 
-    socket.on("call-new", (data) => {
+    socket.client.on("call-new", (data) => {
       setCalls((draft) => {
         draft.calls.push(data);
       });
     });
 
-    socket.on("enqueue", (callData) => {
+    socket.client.on("enqueue", (callData) => {
       setCalls((draft) => {
         const index = draft.calls.findIndex(({callSid}) => callSid === callData.CallSid);
         
@@ -32,13 +40,13 @@ const App = () => {
       });
     });
 
-    socket.on("disconnect", () => {
+    socket.client.on("disconnect", () => {
       console.log("Disconnected from server");
     });
 
     return () => {
-      socket.off("connect");
-      socket.off("disconnect");
+      socket.client.off("connect");
+      socket.client.off("disconnect");
     };
   }, []);
 
@@ -73,15 +81,18 @@ const App = () => {
 
   return (
     <div>
-      {storedToken ? (
+      {isValidToken ? (
         <CallCenter calls={calls} />
       ) : (
-        <Login
-          user={user}
-          setUser={setUser}
-          sendSmsCode={sendSmsCode}
-          sendVerificationCode={sendVerificationCode}
-        />
+        <>
+          <CallCenter calls={calls} />
+          <Login
+            user={user}
+            setUser={setUser}
+            sendSmsCode={sendSmsCode}
+            sendVerificationCode={sendVerificationCode}
+          />
+        </>
       )}
     </div>
   );

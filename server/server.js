@@ -53,6 +53,10 @@ io.on("connection", (socket) => {
     token: twilio.getAccessTokenForVoice(socket.id),
   });
   console.log("New client connected");
+
+  socket.on("answer-call", (data) => {
+    twilio.answerCall(data.sid);
+  });
 });
 
 io.on("disconnect", (socket) => {
@@ -124,6 +128,13 @@ app.post("/enqueue", async (req, res) => {
   io.emit("enqueue", { data: req.body });
 
   const response = twilio.enqueueCall("Customer Support");
+
+  res.type("text/xml");
+  res.send(response.toString());
+});
+
+app.post("/connect-call", (req, res) => {
+  const response = twilio.redirectCall(req.body.sid);
 
   res.type("text/xml");
   res.send(response.toString());

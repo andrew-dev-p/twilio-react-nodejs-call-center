@@ -80,6 +80,25 @@ class Twilio {
     token.addGrant(voiceGrant);
     return token.toJwt();
   };
+
+  answerCall(sid) {
+    this.client.calls(sid).update({
+      url: "https://icaro-callcenter.loca.lt/connect-call",
+      method: "POST",
+      function(err, call) {
+        console.log("anwserCall", call);
+        if (err) {
+          console.error("anwserCall", err);
+        }
+      },
+    });
+  }
+
+  redirectCall(client) {
+    const twiml = new VoiceResponse();
+    twiml.dial().client(client);
+    return twiml;
+  }
 }
 
 const twilioInstance = new Twilio();

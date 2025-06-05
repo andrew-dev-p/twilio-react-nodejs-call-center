@@ -1,8 +1,25 @@
 import Login from "./components/Login";
 import { useImmer } from "use-immer";
 import client from "./lib/axios";
+import socket from "./lib/socketio";
+import { useEffect } from "react";
 
 const App = () => {
+  useEffect(() => {
+    socket.on("connect", () => {
+      console.log("Connected to server");
+    });
+
+    socket.on("disconnect", () => {
+      console.log("Disconnected from server");
+    });
+
+    return () => {
+      socket.off("connect");
+      socket.off("disconnect");
+    };
+  }, []);
+
   const [user, setUser] = useImmer({
     username: "",
     mobileNumber: "",

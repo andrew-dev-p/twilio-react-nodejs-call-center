@@ -10,7 +10,13 @@ dotenv.config();
 
 const app = express();
 app.use(bodyParser.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST"],
+    credentials: true,
+  })
+);
 
 const twilioClient = twilio.getTwilioClient();
 const server = http.createServer(app);
@@ -19,13 +25,19 @@ server.listen(process.env.PORT, () => {
   console.log(`Server is running on port ${process.env.PORT}`);
 });
 
-const socketio = new Server(server);
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST"],
+    credentials: true,
+  },
+});
 
-socketio.on("connection", (socket) => {
+io.on("connection", (socket) => {
   console.log("New client connected");
 });
 
-socketio.on("disconnect", (socket) => {
+io.on("disconnect", (socket) => {
   console.log("Client disconnected");
 });
 

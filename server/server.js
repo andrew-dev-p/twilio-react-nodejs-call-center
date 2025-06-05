@@ -7,6 +7,9 @@ const app = express();
 import bodyParser from "body-parser";
 app.use(bodyParser.json());
 
+import cors from "cors";
+app.use(cors());
+
 import twilio from "./twilio.js";
 const twilioClient = twilio.getTwilioClient();
 

@@ -42,6 +42,10 @@ io.on("disconnect", (socket) => {
   console.log("Client disconnected");
 });
 
+app.get("/", (req, res) => {
+  res.send("Hello World");
+});
+
 app.post("/login", async (req, res) => {
   const { to, username, channel } = req.body;
   const data = await twilio.sendVerify(to, channel);
@@ -69,4 +73,14 @@ app.post("/verify", async (req, res) => {
   } else {
     res.status(401).send({ error: "Invalid code" });
   }
+});
+
+app.post("/call-new", async (req, res) => {
+  console.log("call-new");
+  res.send("call-new");
+});
+
+app.post("/call-status-change", async (req, res) => {
+  console.log("call-status-change");
+  res.send("call-status-change");
 });

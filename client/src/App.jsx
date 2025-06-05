@@ -2,8 +2,9 @@ import Login from "./components/Login";
 import { useImmer } from "use-immer";
 import client from "./lib/axios";
 import socket from "./lib/socketio";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import useLocalStorage from "./hooks/useLocalStorage";
+import CallCenter from "./components/CallCenter";
 
 const App = () => {
   const [storedToken, setStoredToken] = useLocalStorage("token", null);
@@ -53,14 +54,18 @@ const App = () => {
   };
 
   return (
-    <>
-      <Login
-        user={user}
-        setUser={setUser}
-        sendSmsCode={sendSmsCode}
-        sendVerificationCode={sendVerificationCode}
-      />
-    </>
+    <div>
+      {storedToken ? (
+        <CallCenter />
+      ) : (
+        <Login
+          user={user}
+          setUser={setUser}
+          sendSmsCode={sendSmsCode}
+          sendVerificationCode={sendVerificationCode}
+        />
+      )}
+    </div>
   );
 };
 

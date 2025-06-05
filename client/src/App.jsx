@@ -3,9 +3,10 @@ import { useImmer } from "use-immer";
 import client from "./lib/axios";
 import socket from "./lib/socketio";
 import { useEffect, useState } from "react";
+import useLocalStorage from "./hooks/useLocalStorage";
 
 const App = () => {
-  const [token, setToken] = useState(null);
+  const [storedToken, setStoredToken] = useLocalStorage("token", null);
 
   useEffect(() => {
     socket.on("connect", () => {
@@ -48,7 +49,7 @@ const App = () => {
       username: user.username,
     });
 
-    setToken(response.data.token);
+    setStoredToken(response.data.token);
   };
 
   return (
